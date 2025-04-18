@@ -1,0 +1,51 @@
+# Thư mục roles được cài từ Galaxy (nếu dùng ansible-galaxy install)
+roles/*/
+!roles/requirements.yml
+!roles/README.md
+
+# File tạm sinh ra khi chạy playbook
+*.retry
+
+# Secret files hoặc biến nhạy cảm
+*.vault
+*.key
+*.pem
+*.enc
+secrets.yml
+vault.yml
+private_vars.yml
+
+# Inventory nếu chứa thông tin nhạy cảm
+inventory/
+!inventory/sample_inventory.ini
+
+# Các file log/debug
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Python cache (nếu bạn dùng ansible bằng venv)
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+.env/
+
+# MacOS/IDE
+.DS_Store
+.idea/
+.vscode/
+
+# SSH key (nếu có lưu local)
+*.pub
+*.ssh
+.ssh/
+
+# File hóa đơn tạm (nếu có dùng molecule hoặc test)
+.molecule/
+test/
+tests/
+

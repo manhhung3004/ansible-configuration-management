@@ -1,0 +1,62 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: Include common role
+      include_role:
+        name: common
+
+    - name: Custom task using custom module
+      custom_module:
+        param1: value1
+        param2: value2
+
+    - name: Ensure a package is installed
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - git
+        - curl
+
+    - name: Start a service
+      service:
+        name: apache2
+        state: started
+        enabled: true
+
+    - name: Copy a file
+      copy:
+        src: files/example.conf
+        dest: /etc/example.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+- hosts: web
+  become: true
+  tasks:
+    - name: Include web role
+      include_role:
+        name: web
+
+    - name: Ensure a package is installed
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - nginx
+        - php-fpm
+
+    - name: Start a service
+      service:
+        name: nginx
+        state: started
+        enabled: true
+
+    - name: Copy a file
+      copy:
+        src: files/example.conf
+        dest: /etc/nginx/sites-available/example.conf
+        owner: root
+        group: root
+        mode: '0644'

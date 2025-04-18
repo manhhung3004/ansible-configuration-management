@@ -1,0 +1,4 @@
+- hosts: filebeat
+  become: true
+  roles:
+  - filebeat

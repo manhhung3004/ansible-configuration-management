@@ -1,0 +1,15 @@
+- hosts: jenkins
+  roles:
+    - jenkins
+    - jenkins-agent
+  tasks:
+    - name: Install Jenkins
+      apt:
+        name: jenkins
+        state: present
+        update_cache: yes
+    - name: Start Jenkins
+      service:
+        name: jenkins
+        state: started
+        enabled: yes

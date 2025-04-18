@@ -1,0 +1,12 @@
+- hosts: elasticsearch
+  become: true
+  roles:
+  - elasticsearch
+  # tasks:
+  # - name: Ensure Elasticsearch is running
+  #   service:
+  #     name: elasticsearch
+  #     state: started
+  #     enabled: true
+  # - name: Include test tasks
+  #   include_tasks: roles/elasticsearch/test.yml
