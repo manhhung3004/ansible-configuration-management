@@ -1,0 +1,6 @@
+# filepath: /ansible-project/ansible-project/roles/common/defaults/main.yml
+---
+# Default variables for the common role
+########### filebeat #########
+filebeat_version: "0.0.1"
+filebeat_home: "/opt/filebeat"

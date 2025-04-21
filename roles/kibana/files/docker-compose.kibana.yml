@@ -1,0 +1,33 @@
+version: "3.8"
+
+networks:
+  default:
+    name: elastic
+    external: false
+
+services:
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${STACK_VERSION}
+    labels:
+      co.elastic.logs/module: kibana
+    ports:
+      - ${KIBANA_PORT}:5601
+    environment:
+      - SERVERNAME=kibana
+      - ELASTICSEARCH_HOSTS=http://es01:9200
+      - ELASTICSEARCH_USERNAME=kibana_system
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - XPACK_SECURITY_ENCRYPTIONKEY=${ENCRYPTION_KEY}
+      - XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY=${ENCRYPTION_KEY}
+      - XPACK_REPORTING_ENCRYPTIONKEY=${ENCRYPTION_KEY}
+    mem_limit: ${KB_MEM_LIMIT}
+    # command: >
+    #   bash -c '
+    #     ES_HOST=$(grep -A 1 "[elasticsearch]" /home/hungnm/temp/ansible/inventory/hosts.ini | tail -n 1)
+    #     export ELASTICSEARCH_HOSTS=http://$ES_HOST:9200
+    #     /usr/local/bin/kibana-docker'
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s -I http://localhost:5601 | grep -q 'HTTP/1.1 302 Found'" ]
+      interval: 10s
+      timeout: 10s
+      retries: 120

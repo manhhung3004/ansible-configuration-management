@@ -1,0 +1,29 @@
+- name: Stop all running containers
+  shell: |
+    docker stop $(docker ps -q)
+  become: true
+
+- name: Remove all containers
+  shell: |
+    docker rm $(docker ps -aq)
+  become: true
+
+# - name: Remove all Docker images
+#   shell: |
+#     docker rmi $(docker images -q)
+#   become: true
+
+- name: Remove all Docker volumes
+  shell: |
+    docker volume rm $(docker volume ls -q)
+  become: true
+
+- name: Remove all Docker networks
+  shell: |
+    docker network rm $(docker network ls -q)
+  become: true
+
+- name: Prune all unused Docker data
+  shell: |
+    docker system prune -af --volumes
+  become: true

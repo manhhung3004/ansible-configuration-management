@@ -1,0 +1,69 @@
+- name: Create directory for docker-compose files
+  file:
+    path: /home/data/logstash
+    state: directory
+    mode: '0755'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Deploy docker-compose file for logstash
+  copy:
+    src: files/docker-compose.logstash.yml
+    dest: /home/data/logstash/docker-compose.logstash.yml
+    mode: '0644'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Copy .env file for logstash
+  copy:
+    src: files/.env
+    dest: /home/data/logstash/.env
+    mode: '0644'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Copy logstash.conf file for logstash
+  copy:
+    src: files/logstash.conf
+    dest: /home/data/logstash/logstash.conf
+    mode: '0644'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Copy logstash.conf file for logstash
+  copy:
+    src: files/logstash.yml
+    dest: /home/data/logstash/logstash.yml
+    mode: '0644'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Stop and remove all running containers related to docker-compose
+  shell: |
+    docker-compose -f /home/data/logstash/docker-compose.logstash.yml down -v
+    docker system prune -f
+  args:
+    chdir: /home/data/logstash
+  become: true
+
+- name: Remove Docker volumes related to docker-compose
+  shell: docker volume prune -f
+  become: true
+
+- name: Wait for containers to stop before running docker-compose again
+  pause:
+    seconds: 10
+  become: true
+
+- name: Run docker-compose for logstash
+  shell: |
+    docker compose -f /home/data/logstash/docker-compose.logstash.yml up -d
+  args:
+    chdir: /home/data/logstash
+  become: true
+  register: docker_compose_up

@@ -1,2 +1,5 @@
 # filepath: /ansible-project/group_vars/all.yml
 # This file is intentionally left blank.
+ansible_user: terraform
+ansible_ssh_private_key_file: /home/hungnm/temp/terraform/environments/keypem/id_rsa
+ansible_ssh_common_args: '-o StrictHostKeyChecking=no'

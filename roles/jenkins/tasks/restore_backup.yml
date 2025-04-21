@@ -1,0 +1,31 @@
+---
+- name: Copy Jenkins backup file to the server
+  copy:
+    src: jenkins_backup.tar.gz
+    dest: /tmp/jenkins_backup.tar.gz
+  become: true
+
+- name: Stop Jenkins service before restoring
+  service:
+    name: jenkins
+    state: stopped
+  become: true
+
+- name: Extract Jenkins backup
+  shell: |
+    tar -xzf /tmp/jenkins_backup.tar.gz -C /var/lib/jenkins --strip-components=1
+  become: true
+
+- name: Set correct permissions for Jenkins files
+  file:
+    path: /var/lib/jenkins
+    owner: jenkins
+    group: jenkins
+    recurse: true
+  become: true
+
+- name: Start Jenkins service after restoring
+  service:
+    name: jenkins
+    state: started
+  become: true

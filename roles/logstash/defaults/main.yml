@@ -1,0 +1,7 @@
+# filepath: /ansible-project/ansible-project/roles/common/defaults/main.yml
+---
+# Default variables for the common role
+########### Elasticsearch #########
+logstash_version: "0.0.1"
+logstash_home: "/opt/logstash"
+logstash_http_port: 5044

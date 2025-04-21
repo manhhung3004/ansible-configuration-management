@@ -1,0 +1,51 @@
+- name: Create directory for docker-compose files
+  file:
+    path: /home/data/kibana
+    state: directory
+    mode: '0755'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Deploy docker-compose file for Kibana
+  copy:
+    src: files/docker-compose.kibana.yml
+    dest: /home/data/kibana/docker-compose.kibana.yml
+    mode: '0644'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Copy .env file for Kibana
+  copy:
+    src: files/.env
+    dest: /home/data/kibana/.env
+    mode: '0644'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Stop and remove all running containers related to docker-compose
+  shell: |
+    docker-compose -f /home/data/kibana/docker-compose.kibana.yml down
+    docker system prune -f
+  args:
+    chdir: /home/data/kibana
+  become: true
+
+- name: Remove Docker volumes related to docker-compose
+  shell: docker volume prune -f
+  become: true
+
+- name: Wait for containers to stop before running docker-compose again
+  pause:
+    seconds: 10
+  become: true
+
+- name: Run docker-compose for Kibana
+  shell: |
+    docker compose -f /home/data/kibana/docker-compose.kibana.yml up -d
+  args:
+    chdir: /home/data/kibana
+  become: true
+  register: docker_compose_up

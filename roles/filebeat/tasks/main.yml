@@ -1,0 +1,69 @@
+- name: Create directory for docker-compose files
+  file:
+    path: /home/data/filebeat
+    state: directory
+    mode: '0755'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Deploy docker-compose file for filebeat
+  copy:
+    src: files/docker-compose.filebeat.yml
+    dest: /home/data/filebeat/docker-compose.filebeat.yml
+    mode: '0644'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Copy .env file for filebeat
+  copy:
+    src: files/.env
+    dest: /home/data/filebeat/.env
+    mode: '0644'
+    owner: terraform
+    group: terraform
+  become: true
+
+- name: Copy filebeat.yml file for filebeat
+  copy:
+    src: files/filebeat.yml
+    dest: /home/data/filebeat/filebeat.yml
+    mode: '0600'
+    owner: root
+    group: root
+  become: true
+
+- name: Stop and remove all running containers related to docker-compose
+  shell: |
+    docker-compose -f /home/data/filebeat/docker-compose.filebeat.yml down -v
+    docker system prune -f
+  args:
+    chdir: /home/data
+  become: true
+
+- name: Remove Docker volumes related to docker-compose
+  shell: docker volume prune -f
+  become: true
+
+- name: Wait for containers to stop before running docker-compose again
+  pause:
+    seconds: 10
+  become: true
+
+- name: Run docker-compose for filebeat
+  shell: |
+    docker compose -f /home/data/filebeat/docker-compose.filebeat.yml up -d
+  args:
+    chdir: /home/data/filebeat
+  become: true
+  register: docker_compose_up
+
+# - name: Check if Elasticsearch container is healthy
+#   shell: |
+#     docker inspect --format '{{.State.Health.Status}}' $(docker ps -q --filter "name=data-es01-1")
+#   register: health_status
+#   retries: 5
+#   delay: 10
+#   until: health_status.stdout == "healthy"
+#   become: true
