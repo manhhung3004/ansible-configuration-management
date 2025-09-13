@@ -1,0 +1,39 @@
+---
+- name: Update apt cache
+  apt: 
+    update_cache: yes
+
+- name: Check if kind is installed
+  command: kind --version
+  register: kind_check
+
+- name: Check OS architecture
+  command: uname -m
+  register: os_arch
+
+- name: Install kind if not present x86_64
+  command: curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.30.0/kind-linux-amd64
+  when: kind_check.rc != 0 and os_arch.stdout == "x86_64"
+
+- name: Install kind if not present on arm64
+  command: curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.30.0/kind-linux-arm64
+  when: kind_check.rc != 0 and os_arch.stdout == "aarch64"
+
+- name: Move and Executable kind binary
+  command: mv ./kind /usr/local/bin/kind && chmod +x /usr/local/bin/kind
+  when: kind_check.rc != 0
+
+- name: Create kind cluster with Ha-cluster config
+  command: ./roles/kind_cluster/files/init-setup.sh
+  args:
+    creates: /home/{{ ansible_user }}/.kube/config
+  environment:
+    KUBECONFIG: /home/{{ ansible_user }}/.kube/config
+    become: yes
+    become_user: "{{ ansible_user }}"
+
+- name: Verify kind cluster
+  command: kubectl get nodes
+  environment:
+    KUBECONFIG: /home/{{ ansible_user }}/.kube/config
+  register: kubectl_check 
