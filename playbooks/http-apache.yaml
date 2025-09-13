@@ -1,0 +1,37 @@
+---
+- name: Install and Configure Apache HTTP Server
+  hosts: server-tools
+  # gather_facts: false
+  become: true
+  # roles:
+  #   - http-apache
+  tasks:
+    - name: update the APT package index
+      apt: 
+        update_cache: yes
+    - name: Install apache HTTP server
+      apt:
+        name: apache2
+        state: present
+        update_cache: yes
+    - name: Ensure apache is running
+      service:
+        name: apache2
+        state: started
+        enabled: true
+    - name: Create a custom index.html
+      copy:
+        dest: /var/www/html/index.html
+        content: "<h1>Welcome to Apache HTTP Server managed by Ansible!</h1>"
+        owner: www-data
+        group: www-data
+        mode: '0644'
+    - name: Open HTTP port in UFW
+      ufw:
+        rule: allow
+        port: '80'
+        proto: tcp
+    - name: Ensure UFW is enabled
+      ufw:
+        state: enabled
+        policy: allow

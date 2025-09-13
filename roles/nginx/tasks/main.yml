@@ -52,8 +52,8 @@
     path: /home/data
     state: directory
     mode: '0755'
-    owner: terraform
-    group: terraform
+    owner: root
+    group: root
   become: true
 
 - name: Deploy docker-compose file for Elasticsearch
@@ -61,8 +61,8 @@
     src: files/docker-compose.elasticsearch.yml
     dest: /home/data/docker-compose.elasticsearch.yml
     mode: '0644'
-    owner: terraform
-    group: terraform
+    owner: root
+    group: root
   become: true
 
 - name: Copy .env file for Elasticsearch
@@ -70,8 +70,8 @@
     src: files/.env
     dest: /home/data/.env
     mode: '0644'
-    owner: terraform
-    group: terraform
+    owner: root
+    group: root
   become: true
 
 - name: Stop and remove all running containers related to docker-compose

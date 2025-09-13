@@ -1,0 +1,4 @@
+- hosts: server-kind
+  become: true
+  roles:
+    - initvm

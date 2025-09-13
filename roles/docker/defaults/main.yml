@@ -1,6 +1,0 @@
-# filepath: /ansible-project/ansible-project/roles/common/defaults/main.yml
----
-# Default variables for the common role
-########### Elasticsearch #########
-docker_version: "0.0.1"
-docker_home: "/opt/docker"

@@ -1,9 +1,0 @@
-- name: Restart service
-  service:
-    name: your_service_name
-    state: restarted
-  when: service_changed
-
-- name: Reload configuration
-  command: your_command_to_reload
-  when: config_changed

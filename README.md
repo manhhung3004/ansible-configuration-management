@@ -56,6 +56,10 @@ The project is organized into the following directories and files:
    ```
    ansible-playbook playbooks/site.yml
    ```
+7. Examples
+    ```
+    ansible-playbook ./playbooks/http-apache.yaml -i ./inventories/devops/hosts.ini
+    ```
 
 ## Usage Guidelines
 - Ensure that you have Ansible installed on your machine.

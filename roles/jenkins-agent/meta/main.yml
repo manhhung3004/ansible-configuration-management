@@ -1,7 +1,0 @@
-dependencies:
-  - role: common
-    src: git+https://github.com/example/common-role.git
-    version: v1.0.0
-  - role: another_role
-    src: git+https://github.com/example/another-role.git
-    version: v2.0.0

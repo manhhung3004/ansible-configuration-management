@@ -1,6 +1,0 @@
-# filepath: /ansible-project/ansible-project/roles/common/vars/main.yml
----
-elasticsearch_plugins:
-- git
-- workflow-aggregator
-- credentials

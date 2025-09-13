@@ -1,0 +1,6 @@
+# - name: Configure Prometheus
+#   hosts: prometheus
+#   gather_facts: false
+#   become: true
+#   roles:
+#     - prometheus

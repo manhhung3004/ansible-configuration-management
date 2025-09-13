@@ -1,5 +1,0 @@
-# filepath: /home/hungnm/ansible/roles/jenkins/handlers/main.yml
----
-- name: Trigger Jenkins Agent Role
-  include_role:
-    name: jenkins-agent
