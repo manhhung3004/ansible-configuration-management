@@ -16,10 +16,11 @@
     group: "{{ jenkins_slave_group }}"
     mode: '0755'
 
+---
 - name: Update apt cache
   apt:
-      update_cache: yes
-      cache_valid_time: 3600
+    update_cache: yes
+    cache_valid_time: 3600
 
 - name: Install Java (OpenJDK 11)
   apt:
@@ -27,21 +28,18 @@
     state: present
     update_cache: yes
 
-- name: Download Jenkins slave jar
-  ansible.builtin.get_url:
-    url: "{{ jenkins_master_url }}/jnlpJars/slave.jar"
-    dest: "{{ jenkins_slave_home }}/slave.jar"
-    owner: "{{ jenkins_slave_user }}"
-    group: "{{ jenkins_slave_group }}"
-    mode: '0755'
 
-- name: Ensure Jenkins slave service file is present
-  ansible.builtin.template:
-    src: jenkins-slave.service.j2
-    dest: /etc/systemd/system/jenkins-slave.service
-    owner: root
-    group: root
-    mode: '0644'
+- name: Install Jenkins agent
+  apt:
+    name: jenkins
+    state: present
+    update_cache: yes
+
+- name: Start and enable Jenkins service
+  systemd:
+        name: jenkins
+        state: started
+        enabled: yes
 
 - name: Reload systemd to recognize the new service
   ansible.builtin.systemd:
@@ -52,17 +50,8 @@
     name: jenkins-slave
     state: started
     enabled: yes
-    
+
 - name: Verify Jenkins slave service status
   ansible.builtin.systemd:
     name: jenkins-slave
     register: jenkins_slave_status
-
-- name: Get Jenkins initial admin password
-  command: cat /var/lib/jenkins/secrets/initialAdminPassword
-  register: jenkins_password
-  changed_when: false
-
-- name: Display Jenkins initial password
-  debug:
-        msg: "Jenkins initial admin password: {{ jenkins_password.stdout }}"
