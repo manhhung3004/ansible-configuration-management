@@ -15,7 +15,7 @@
     owner: "{{ jenkins_slave_user }}"
     group: "{{ jenkins_slave_group }}"
     mode: '0755'
-    
+
 - name: Update apt cache
   apt:
     update_cache: yes
@@ -27,8 +27,18 @@
     state: present
     update_cache: yes
 
+- name: Add Jenkins GPG key
+  apt_key:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        state: present
 
-- name: Install Jenkins agent
+- name: Add Jenkins repository
+  apt_repository:
+        repo: "deb https://pkg.jenkins.io/debian-stable binary/"
+        state: present
+        update_cache: yes
+
+- name: Install Jenkins
   apt:
     name: jenkins
     state: present
