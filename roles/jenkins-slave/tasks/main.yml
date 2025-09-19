@@ -1,7 +1,13 @@
+- name: Create jenkins group
+  ansible.builtin.group:
+    name: "{{ jenkins_slave_group }}"
+    state: present
+
 - name: create jenkins user
   ansible.builtin.user:
     name: "{{ jenkins_slave_user }}"
     group: "{{ jenkins_slave_group }}"
+
 - name: Create directory for Jenkins slave
   ansible.builtin.file:
     path: "{{ jenkins_slave_home }}"
@@ -9,15 +15,18 @@
     owner: "{{ jenkins_slave_user }}"
     group: "{{ jenkins_slave_group }}"
     mode: '0755'
+
 - name: Update apt cache
   apt:
       update_cache: yes
       cache_valid_time: 3600
+
 - name: Install Java (OpenJDK 11)
   apt:
     name: openjdk-11-jdk
     state: present
     update_cache: yes
+
 - name: Download Jenkins slave jar
   ansible.builtin.get_url:
     url: "{{ jenkins_master_url }}/jnlpJars/slave.jar"
@@ -25,6 +34,7 @@
     owner: "{{ jenkins_slave_user }}"
     group: "{{ jenkins_slave_group }}"
     mode: '0755'
+
 - name: Ensure Jenkins slave service file is present
   ansible.builtin.template:
     src: jenkins-slave.service.j2
@@ -32,14 +42,17 @@
     owner: root
     group: root
     mode: '0644'
+
 - name: Reload systemd to recognize the new service
   ansible.builtin.systemd:
     daemon_reload: yes
+
 - name: Enable and start Jenkins slave service
   ansible.builtin.systemd:
     name: jenkins-slave
     state: started
     enabled: yes
+    
 - name: Verify Jenkins slave service status
   ansible.builtin.systemd:
     name: jenkins-slave
