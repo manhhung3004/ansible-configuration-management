@@ -15,8 +15,7 @@
     owner: "{{ jenkins_slave_user }}"
     group: "{{ jenkins_slave_group }}"
     mode: '0755'
-
----
+    
 - name: Update apt cache
   apt:
     update_cache: yes
