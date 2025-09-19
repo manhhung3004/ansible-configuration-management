@@ -1,7 +1,8 @@
-- host: server_kind
+- name: Setup Jenkins Agent
+  hosts: server_agent
   become: true
   gather_facts: true
   vars_files:
-    - ../group_vars/server_kind.yml
+    - ../group_vars/server_agent.yml
   roles:
     - jenkins-agent

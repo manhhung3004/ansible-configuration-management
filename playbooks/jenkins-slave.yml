@@ -1,4 +1,5 @@
-- host: server_slave
+- name: Setup Jenkins Slave
+  hosts: server_slave
   vars_files:
     - ../group_vars/server_slave.yml
   become: true
