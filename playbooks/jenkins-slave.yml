@@ -1,0 +1,7 @@
+- host: server_slave
+  vars_files:
+    - ../group_vars/server_slave.yml
+  become: true
+  gather_facts: true
+  roles:
+    - jenkins-slave

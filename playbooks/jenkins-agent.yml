@@ -1,0 +1,7 @@
+- host: server_kind
+  become: true
+  gather_facts: true
+  vars_files:
+    - ../group_vars/server_kind.yml
+  roles:
+    - jenkins-agent

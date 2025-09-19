@@ -10,7 +10,7 @@ NC='\033[0m' # No Color
 
 print_status(){
     echo -e "${GREEN}[INFO]${NC} $1"
-}
+} 
 print_error(){
     echo -e "${RED}[ERROR]${NC} $1"
     exit 1

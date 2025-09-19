@@ -1,0 +1,15 @@
+---
+- name: Create directory for Jenkins agent
+  ansible.builtin.file:
+    path: "{{ jenkins_agent_home }}"
+    state: directory
+    owner: "{{ jenkins_agent_user }}"
+    group: "{{ jenkins_agent_group }}"
+    mode: '0755'
+- name: Download Jenkins agent jar
+  ansible.builtin.get_url:
+    url: "{{ jenkins_master_url }}/jnlpJars/agent.jar"
+    dest: "{{ jenkins_agent_home }}/agent.jar"
+    owner: "{{ jenkins_agent_user }}"
+    group: "{{ jenkins_agent_group }}"
+    mode: '0755'

@@ -1,0 +1,7 @@
+# filepath: /ansible-project/ansible-project/roles/common/defaults/main.yml
+---
+# Default variables for the common role
+########### Elasticsearch #########
+kibana_version: "0.0.1"
+kibana_home: "/opt/kibana"
+kibana_http_port: 5601

@@ -1,2 +1,6 @@
 # filepath: /ansible-project/ansible-project/roles/common/vars/main.yml
-# This file is intentionally left blank.
+---
+kibana_plugins:
+- git
+- workflow-aggregator
+- credentials
