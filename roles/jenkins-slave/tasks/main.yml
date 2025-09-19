@@ -1,3 +1,7 @@
+- name: create jenkins user
+  ansible.builtin.user:
+    name: "{{ jenkins_slave_user }}"
+    group: "{{ jenkins_slave_group }}"
 - name: Create directory for Jenkins slave
   ansible.builtin.file:
     path: "{{ jenkins_slave_home }}"
@@ -40,7 +44,7 @@
   ansible.builtin.systemd:
     name: jenkins-slave
     register: jenkins_slave_status
-    
+
 - name: Get Jenkins initial admin password
   command: cat /var/lib/jenkins/secrets/initialAdminPassword
   register: jenkins_password
