@@ -21,11 +21,16 @@
     update_cache: yes
     cache_valid_time: 3600
 
-- name: Install Java (OpenJDK 11)
+- name: install fontconfig package
   apt:
-    name: openjdk-11-jdk
+    name: fontconfig
     state: present
     update_cache: yes
+
+- name: install Java (openjdk-21-jre)
+  apt:
+    name: openjdk-21-jre
+    state: present
 
 - name: Add Jenkins GPG key
   apt_key:
@@ -45,7 +50,7 @@
     update_cache: yes
 
 - name: Start and enable Jenkins service
-  systemd:
+  ansible.builtin.systemd:
         name: jenkins
         state: started
         enabled: yes

@@ -3,3 +3,5 @@ jenkins_slave_user: jenkins
 jenkins_slave_group: jenkins
 jenkins_slave_version: "4.10"
 jenkins_master_url: "https://jenkins.manhhung20033004.io.vn:8080"
+
+ip_address: "192.168.1.200"

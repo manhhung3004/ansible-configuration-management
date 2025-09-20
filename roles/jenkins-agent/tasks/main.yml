@@ -1,15 +1,52 @@
----
+- name: Create jenkins group
+  ansible.builtin.group:
+    name: "{{ agent_group }}"
+    state: present
+
+- name: create jenkins user
+  ansible.builtin.user:
+    name: "{{ agent_user }}"
+    group: "{{ agent_group }}"
+
 - name: Create directory for Jenkins agent
   ansible.builtin.file:
-    path: "{{ jenkins_agent_home }}"
+    path: "{{ agent_home }}"
     state: directory
-    owner: "{{ jenkins_agent_user }}"
-    group: "{{ jenkins_agent_group }}"
+    owner: "{{ agent_user }}"
+    group: "{{ agent_group }}"
     mode: '0755'
-- name: Download Jenkins agent jar
-  ansible.builtin.get_url:
-    url: "{{ jenkins_master_url }}/jnlpJars/agent.jar"
-    dest: "{{ jenkins_agent_home }}/agent.jar"
-    owner: "{{ jenkins_agent_user }}"
-    group: "{{ jenkins_agent_group }}"
-    mode: '0755'
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: install fontconfig package
+  apt:
+    name: fontconfig
+    state: present
+    update_cache: yes
+
+- name: install Java (openjdk-21-jre)
+  apt:
+    name: openjdk-21-jre
+    state: present
+
+- name: Create .ssh for SSH mode (so controller can connect)
+  ansible.builtin.file:
+    path: "/home/{{ agent_user }}/.ssh"
+    state: directory
+    mode: "0700"
+    owner: "{{ agent_user }}"
+    group: "{{ agent_user }}"
+  when: agent_mode == 'ssh'
+
+- name: Authorize controller public key (SSH mode)
+  ansible.builtin.lineinfile:
+    path: "/home/{{ ssh_user }}/.ssh/authorized_keys"
+    create: yes
+    line: "{{ controller_pubkey }}"
+    owner: "{{ ssh_user }}"
+    group: "{{ ssh_user }}"
+    mode: "0600"
+  when: agent_mode == 'ssh'

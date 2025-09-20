@@ -1,4 +1,8 @@
-- hosts: nginx
+- name: Setup Nginx Web Server
+  hosts: server_slave
+  vars_files:
+    - ../group_vars/server_slave.yml
   become: true
+  gather_facts: true
   roles:
-  - nginx
+    - nginx

@@ -1,7 +1,11 @@
-jenkins_agent_home: /opt/jenkins
-jenkins_agent_user: jenkins
-jenkins_agent_group: jenkins
-jenkins_agent_version: "4.10"
-jenkins_master_url: "https://jenkins.manhhung20033004.io.vn:8080"
-jenkins_agent_name: "agent-01"
-jenkins_agent_secret: "300420"
+# ===== Required base vars =====
+jenkins_url: "https://jenkins.example.com"     # no trailing slash
+agent_mode: "ssh"                              # "jnlp" or "ssh"
+agent_name: "agent-01"
+agent_labels: "linux docker"
+agent_user: "jenkins"
+agent_group: "jenkins"
+agent_home: "/opt/jenkins"
+
+ssh_user: "jenkins"
+controller_pubkey: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAI.... controller@jenkins"

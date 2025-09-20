@@ -1,109 +1,122 @@
-- name: Install prerequisites for Docker
-  apt:
-    name: "{{ item }}"
-    state: present
-  loop:
-  - ca-certificates
-  - curl
-  - gnupg
-  - lsb-release
-  - software-properties-common
-  become: true
+- name: Sync nginx config files to server
+  ansible.builtin.synchronize:
+    src: roles/nginx/files/
+    dest: /opt/configs/nginx/
+    recursive: yes
+    owner: root
+    group: root
+    mode: '0644'
 
-- name: Create the /etc/apt/keyrings directory
-  file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: '0755'
-  become: true
+- name: Sync ssh certificates files to server
+  ansible.builtin.synchronize:
+    src: files/sshkey/
+    dest: /opt/configs/nginx/
+    recursive: yes
+    owner: root
+    group: root
+    mode: '0644'
 
-- name: Add Docker's official GPG key
-  shell: |
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | tee /etc/apt/keyrings/docker.asc
-    chmod a+r /etc/apt/keyrings/docker.asc
-  become: true
-
-- name: Add Docker repository
-  apt_repository:
-    repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release | lower }} stable"
-    state: present
-    update_cache: yes
-    filename: docker
-  become: true
-
-- name: Update apt cache
-  apt:
-    update_cache: yes
-  become: true
-
-- name: Install Docker packages (latest version)
+- name: Install prerequisites
   apt:
     name:
-    - docker-ce
-    - docker-ce-cli
-    - containerd.io
-    - docker-buildx-plugin
-    - docker-compose-plugin
+      - curl
+      - gnupg2
+      - ca-certificates
+      - lsb-release
+      - ubuntu-keyring
     state: present
-  become: true
 
-- name: Create directory for docker-compose files
-  file:
-    path: /home/data
-    state: directory
-    mode: '0755'
+- name: Import an official nginx signing key so apt could verify the packages authenticity.
+  ansible.builtin.apt_key:
+    url: https://nginx.org/keys/nginx_signing.key
+    state: present
+
+- name: Add nginx repository
+  command: curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
+
+- name: set up the apt repository for stable nginx packages
+  ansible.builtin.apt_repository:
+    repo: "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu `lsb_release -cs` nginx"
+    state: present
+    filename: nginx
+    update_cache: yes
+
+- name: Set up repository pinning to prefer our packages over distribution-provided ones
+  command: echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" | sudo tee /etc/apt/preferences.d/99nginx    | sudo tee /etc/apt/preferences.d/99nginx
+
+- name: check port 8080
+  ansible.builtin.command: sudo netstat -tuln | grep 8080
+  register: port_8080_check
+  ignore_errors: yes
+
+- name: install nginx web server
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Symlink nginx.conf
+  ansible.builtin.file:
+    src: /opt/configs/nginx/nginx.conf
+    dest: /etc/nginx/nginx.conf
+    state: link
     owner: root
     group: root
-  become: true
 
-- name: Deploy docker-compose file for Elasticsearch
-  copy:
-    src: files/docker-compose.elasticsearch.yml
-    dest: /home/data/docker-compose.elasticsearch.yml
+- name: Symlink page-not-found.html
+  ansible.builtin.file:
+    src: /opt/configs/nginx/page-not-found.html
+    dest: /usr/share/nginx/html/page-not-found.html
+    state: link
+    owner: root
+    group: root
+
+- name: Symlink mime.types
+  ansible.builtin.file:
+    src: /opt/configs/nginx/mime.types
+    dest: /etc/nginx/mime.types
+    state: link
+    owner: root
+    group: root
+
+- name: Symlink SSL cert fullchain.pem for nginx
+  ansible.builtin.file:
+    src: /opt/configs/nginx/fullchain.pem
+    dest: /etc/ssl/certs/fullchain.pem
+    state: link
+    owner: root
+    group: root
+
+- name: Symlink SSL key key.pem for nginx
+  ansible.builtin.file:
+    src: /opt/configs/nginx/key.pem
+    dest: /etc/ssl/private/key.pem
+    state: link
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Start and enable nginx service
+  ansible.builtin.systemd:
+        name: nginx
+        state: started
+        enabled: yes
+
+- name: Reload systemd to recognize the new service
+  ansible.builtin.systemd:
+    daemon_reload: yes
+
+- name: Ensure nginx is listening on port 80
+  ansible.builtin.ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+    state: enabled
+
+- name: Create a simple index.html file
+  ansible.builtin.copy:
+    dest: /var/www/html/index.html
+    content: "<h1>Welcome to Nginx Web Server!</h1>"
+    owner: www-data
+    group: www-data
     mode: '0644'
-    owner: root
-    group: root
-  become: true
-
-- name: Copy .env file for Elasticsearch
-  copy:
-    src: files/.env
-    dest: /home/data/.env
-    mode: '0644'
-    owner: root
-    group: root
-  become: true
-
-- name: Stop and remove all running containers related to docker-compose
-  shell: |
-    docker-compose -f /home/data/docker-compose.elasticsearch.yml down
-    docker system prune -f
-  args:
-    chdir: /home/data
-  become: true
-
-- name: Remove Docker volumes related to docker-compose
-  shell: docker volume prune -f
-  become: true
-
-- name: Wait for containers to stop before running docker-compose again
-  pause:
-    seconds: 10
-  become: true
-
-- name: Run docker-compose for Elasticsearch
-  shell: |
-    docker compose -f /home/data/docker-compose.elasticsearch.yml up -d
-  args:
-    chdir: /home/data
-  become: true
-  register: docker_compose_up
-
-# - name: Check if Elasticsearch container is healthy
-#   shell: |
-#     docker inspect --format '{{.State.Health.Status}}' $(docker ps -q --filter "name=data-es01-1")
-#   register: health_status
-#   retries: 5
-#   delay: 10
-#   until: health_status.stdout == "healthy"
-#   become: true
