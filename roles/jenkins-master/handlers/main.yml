@@ -1,0 +1,9 @@
+- name: Reload systemd to recognize the new service
+  ansible.builtin.systemd:
+    daemon_reload: yes
+  
+- name: Restart Jenkins master service
+  ansible.builtin.systemd:
+    name: jenkins-master
+    state: restarted
+    enabled: yes

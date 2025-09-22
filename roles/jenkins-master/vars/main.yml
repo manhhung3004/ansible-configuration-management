@@ -1,0 +1,9 @@
+jenkins_master_name: jenkins-master
+jenkins_master_description: Jenkins master managed by Ansible
+jenkins_master_port: 7080
+jenkins_master_user: jenkins
+jenkins_master_group: jenkins
+jenkins_master_home: /var/lib/jenkins
+jenkins_master_executors: 2
+jenkins_master_mode: NORMAL
+jenkins_master_labels: ansible-master

@@ -1,0 +1,8 @@
+- name: Configure Jenkins master from template
+  ansible.builtin.template:
+    src: ../templates/jenkins-master-config.xml.j2
+    dest: /etc/jenkins-master/config.xml
+    owner: "{{ jenkins_master_user }}"
+    group: "{{ jenkins_master_group }}"
+    mode: '0644'
+  notify: Restart Jenkins master service

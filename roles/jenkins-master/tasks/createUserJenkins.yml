@@ -1,0 +1,17 @@
+- name: Create jenkins group
+  ansible.builtin.group:
+    name: "{{ jenkins_slave_group }}"
+    state: present
+
+- name: create jenkins user
+  ansible.builtin.user:
+    name: "{{ jenkins_slave_user }}"
+    group: "{{ jenkins_slave_group }}"
+
+- name: Create directory for Jenkins slave
+  ansible.builtin.file:
+    path: "{{ jenkins_slave_home }}"
+    state: directory
+    owner: "{{ jenkins_slave_user }}"
+    group: "{{ jenkins_slave_group }}"
+    mode: '0755'

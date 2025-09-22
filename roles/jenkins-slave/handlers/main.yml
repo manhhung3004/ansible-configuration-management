@@ -1,7 +1,0 @@
----
-- handler: Reload systemd
-  ansible.builtin.systemd:
-    daemon_reload: yes
-    state: reloaded
-    enabled: yes
-

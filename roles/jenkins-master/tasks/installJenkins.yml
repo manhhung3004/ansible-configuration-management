@@ -1,0 +1,32 @@
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+
+- name: install fontconfig package
+  apt:
+    name: fontconfig
+    state: present
+    update_cache: yes
+
+- name: install Java (openjdk-21-jre)
+  apt:
+    name: openjdk-21-jre
+    state: present
+
+- name: Add Jenkins GPG key
+  apt_key:
+        url: https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+        state: present
+
+- name: Add Jenkins repository
+  apt_repository:
+        repo: "deb https://pkg.jenkins.io/debian-stable binary/"
+        state: present
+        update_cache: yes
+
+- name: Install Jenkins
+  apt:
+    name: jenkins
+    state: present
+    update_cache: yes
