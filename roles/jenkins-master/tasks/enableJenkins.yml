@@ -7,8 +7,3 @@
 - name: Reload systemd to recognize the new service
   ansible.builtin.systemd:
     daemon_reload: yes
-
-- name: Verify Jenkins service status
-  ansible.builtin.systemd:
-    name: jenkins
-    register: jenkins_status
