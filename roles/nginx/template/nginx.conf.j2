@@ -1,6 +1,6 @@
 # define the user that will own the process
 upstream jenkins {
-    server "{{ ip_address }}":""{{ port }};
+    server "{{ ip_address }}":""{{ jenkins_slave_port }}";
 }
 
 # HTTP to HTTPS redirect for Jenkins
@@ -13,7 +13,7 @@ server {
 # jenkins server configuration
 server {
     listen 443 ssl;
-    server_name jenkins.manhhung20033004.io.vn;
+    server_name "{{ server_name_jenkins }}";
 
     ssl_certificate /etc/ssl/certs/fullchain.pem;
     ssl_certificate_key /etc/ssl/private/key.pem;

@@ -1,12 +1,22 @@
-- name: Copy nginx config files to server
-  ansible.builtin.copy:
-    src: roles/nginx/files/
-    dest: /opt/configs/nginx/
-    remote_src: no
-    directory_mode: yes
+
+- name: Render nginx.conf from template
+  ansible.builtin.template:
+    src: ../template/nginx.conf.j2
+    dest: /opt/configs/nginx/nginx.conf
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Render proxy.conf from template
+  ansible.builtin.template:
+    src: ../template/nginx.conf.j2
+    dest: /opt/configs/nginx/include/proxy.conf
+    owner: root
+    group: root
+    mode: '0644'
+
 - name: Copy ssh certificates files to server
   ansible.builtin.copy:
-    src: roles/nginx/files/sshkey/
-    dest: /opt/configs/nginx/
-    remote_src: no
+    src: files/sshkey/
+    dest: /opt/configs/nginx/sshkey/
     directory_mode: yes
