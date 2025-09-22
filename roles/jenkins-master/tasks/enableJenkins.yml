@@ -1,20 +1,14 @@
 - name: Start and enable Jenkins service
   ansible.builtin.systemd:
-        name: jenkins
-        state: started
-        enabled: yes
+    name: jenkins
+    state: started
+    enabled: yes
 
 - name: Reload systemd to recognize the new service
   ansible.builtin.systemd:
     daemon_reload: yes
 
-- name: Enable and start Jenkins master service
+- name: Verify Jenkins service status
   ansible.builtin.systemd:
-    name: jenkins-master
-    state: started
-    enabled: yes
-
-- name: Verify Jenkins master service status
-  ansible.builtin.systemd:
-    name: jenkins-master
-    register: jenkins_master_status
+    name: jenkins
+    register: jenkins_status
