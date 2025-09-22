@@ -1,6 +1,6 @@
 - name: Create folder for nginx config files
   ansible.builtin.file:
-    path: /opt/configs/nginx
+    path: /opt/configs/nginx/include
     state: directory
     owner: root
     group: root
