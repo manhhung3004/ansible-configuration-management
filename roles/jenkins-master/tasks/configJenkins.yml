@@ -6,3 +6,10 @@
     group: root
     mode: '0644'
   notify: Restart Jenkins service
+
+- name: Change Jenkins port in systemd service file
+  ansible.builtin.replace:
+    path: /lib/systemd/system/jenkins.service
+    regexp: '--httpPort=\\d+'
+    replace: '--httpPort={{ jenkins_master_port | default(8080) }}'
+  notify: Restart Jenkins service
