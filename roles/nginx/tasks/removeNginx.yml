@@ -1,0 +1,91 @@
+- name: Stat nginx config directory
+  ansible.builtin.stat:
+    path: /opt/configs/nginx
+  register: nginx_config_stat
+
+- name: Remove nginx config directory if exists
+  ansible.builtin.file:
+    path: /opt/configs/nginx
+    state: absent
+  ignore_errors: yes
+  when: nginx_config_stat.stat.exists
+
+- name: Stat nginx symlink directory
+  ansible.builtin.stat:
+    path: /etc/nginx/sites-enabled
+  register: nginx_symlink_stat
+
+- name: Remove nginx symlink directory if exists
+  ansible.builtin.file:
+    path: /etc/nginx/sites-enabled
+    state: absent
+  ignore_errors: yes
+  when: nginx_symlink_stat.stat.exists
+
+- name: Stat nginx include directory
+  ansible.builtin.stat:
+    path: /etc/nginx/include
+  register: nginx_include_stat
+
+- name: Remove nginx include directory if exists
+  ansible.builtin.file:
+    path: /etc/nginx/include
+    state: absent
+  ignore_errors: yes
+  when: nginx_include_stat.stat.exists
+
+- name: Remove nginx package
+  ansible.builtin.apt:
+    name: nginx
+    state: absent
+    purge: yes
+  ignore_errors: yes
+
+- name: Stat nginx main config
+  ansible.builtin.stat:
+    path: /etc/nginx/nginx.conf
+  register: nginx_mainconf_stat
+
+- name: Remove nginx main config if exists
+  ansible.builtin.file:
+    path: /etc/nginx/nginx.conf
+    state: absent
+  ignore_errors: yes
+  when: nginx_mainconf_stat.stat.exists
+
+- name: Stat nginx mime.types
+  ansible.builtin.stat:
+    path: /etc/nginx/mime.types
+  register: nginx_mime_stat
+
+- name: Remove nginx mime.types if exists
+  ansible.builtin.file:
+    path: /etc/nginx/mime.types
+    state: absent
+  ignore_errors: yes
+  when: nginx_mime_stat.stat.exists
+
+- name: Stat SSL cert
+  ansible.builtin.stat:
+    path: /etc/ssl/certs/fullchain.pem
+  register: nginx_sslcert_stat
+
+- name: Remove SSL cert if exists
+  ansible.builtin.file:
+    path: /etc/ssl/certs/fullchain.pem
+    state: absent
+  ignore_errors: yes
+  when: nginx_sslcert_stat.stat.exists
+
+- name: Stat SSL key
+  ansible.builtin.stat:
+    path: /etc/ssl/private/key.pem
+  register: nginx_sslkey_stat
+
+- name: Remove SSL key if exists
+  ansible.builtin.file:
+    path: /etc/ssl/private/key.pem
+    state: absent
+  ignore_errors: yes
+  when: nginx_sslkey_stat.stat.exists
+

@@ -1,3 +1,12 @@
+- name: Check if nginx is installed
+  ansible.builtin.command: nginx -v
+  register: nginx_check
+  ignore_errors: yes
+
+- name: Remove nginx if already installed
+  import_tasks: removeNginx.yml
+  when: nginx_check.rc == 0
+
 - name: Transfer config files to server
   import_tasks: transferFile.yml
 
