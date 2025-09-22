@@ -14,7 +14,7 @@
     state: present
 
 - name: Add nginx repository
-  command: curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
+  ansible.builtin.shell: curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
 
 - name: set up the apt repository for stable nginx packages
   ansible.builtin.apt_repository:
