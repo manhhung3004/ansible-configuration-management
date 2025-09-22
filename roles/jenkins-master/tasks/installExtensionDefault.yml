@@ -14,4 +14,4 @@
     owner: jenkins
     group: jenkins
   loop: "{{ jenkins_plugins }}"
-  notify: Restart Jenkins master service
+  notify: Restart Jenkins service
