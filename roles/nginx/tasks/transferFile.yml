@@ -37,3 +37,11 @@
     owner: root
     group: root
     mode: '0644'
+
+- name: Copy page-not-found.html to server
+  ansible.builtin.copy:
+    src: ../files/page-not-found.html
+    dest: /opt/configs/nginx/page-not-found.html
+    owner: root
+    group: root
+    mode: '0644'
