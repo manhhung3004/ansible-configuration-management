@@ -16,7 +16,7 @@
 
 - name: Render proxy.conf from template
   ansible.builtin.template:
-    src: ../template/nginx.conf.j2
+    src: ../template/proxy.conf.j2
     dest: /opt/configs/nginx/include/proxy.conf
     owner: root
     group: root

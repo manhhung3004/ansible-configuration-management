@@ -1,8 +1,21 @@
+- name: Remove old nginx.conf if exists
+  ansible.builtin.file:
+    path: /etc/nginx/nginx.conf
+    state: absent
+  ignore_errors: yes
 
 - name: Symlink nginx.conf
   ansible.builtin.file:
     src: /opt/configs/nginx/nginx.conf
     dest: /etc/nginx/nginx.conf
+    state: link
+    owner: root
+    group: root
+
+- name: Symlink proxy.conf
+  ansible.builtin.file:
+    src: /opt/configs/nginx/include/proxy.conf
+    dest: /etc/nginx/conf.d/proxy.conf
     state: link
     owner: root
     group: root
@@ -14,28 +27,3 @@
     state: link
     owner: root
     group: root
-
-- name: Symlink mime.types
-  ansible.builtin.file:
-    src: /opt/configs/nginx/mime.types
-    dest: /etc/nginx/mime.types
-    state: link
-    owner: root
-    group: root
-
-- name: Symlink SSL cert fullchain.pem for nginx
-  ansible.builtin.file:
-    src: /opt/configs/nginx/fullchain.pem
-    dest: /etc/ssl/certs/fullchain.pem
-    state: link
-    owner: root
-    group: root
-
-- name: Symlink SSL key key.pem for nginx
-  ansible.builtin.file:
-    src: /opt/configs/nginx/key.pem
-    dest: /etc/ssl/private/key.pem
-    state: link
-    owner: root
-    group: root
-    mode: '0600'
