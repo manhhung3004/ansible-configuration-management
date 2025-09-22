@@ -1,7 +1,6 @@
 ---
-ip_address: ""
+ip_address: "192.168.1.200"
 nginx_port: 80
-server_name: *.manhhung20033004.io.vn
+server_name: "nginx.manhhung20033004.io.vn"
 path_cert_tls: /opt/configs/nginx/certificates
-version: "1.18.0-0ubuntu1"
-
+version: "1.0"
