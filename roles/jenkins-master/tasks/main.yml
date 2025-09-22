@@ -1,11 +1,11 @@
 - name: Create user and group for jenkins
-  import_tasks: createUser.yml
+  import_tasks: createUserJenkins.yml
 
-- name: Install jenkins slave service
+- name: Install jenkins master service
   import_tasks: installJenkins.yml
 
-- name: enable and start jenkins slave service
+- name: enable and start jenkins master service
   import_tasks: enableJenkins.yml
 
-- name: set up jenkins slave configuration files
+- name: set up jenkins master configuration files
   import_tasks: configJenkins.yml
