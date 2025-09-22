@@ -1,13 +1,7 @@
-- name: Remove old nginx.conf if exists
-  ansible.builtin.file:
-    path: /etc/nginx/nginx.conf
-    state: absent
-  ignore_errors: yes
-
 - name: Symlink nginx.conf
   ansible.builtin.file:
     src: /opt/configs/nginx/nginx.conf
-    dest: /etc/nginx/nginx.conf
+    dest: /etc/nginx/conf.d/nginx.conf
     state: link
     owner: root
     group: root
@@ -15,7 +9,7 @@
 - name: Symlink proxy.conf
   ansible.builtin.file:
     src: /opt/configs/nginx/include/proxy.conf
-    dest: /etc/nginx/conf.d/proxy.conf
+    dest: /etc/nginx/include/proxy.conf
     state: link
     owner: root
     group: root
