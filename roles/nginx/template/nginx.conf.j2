@@ -5,7 +5,7 @@ upstream jenkins {
 
 # HTTP to HTTPS redirect for Jenkins
 server {
-    listen {{ port }};
+    listen {{ nginx_port }};
     server_name jenkins.manhhung20033004.io.vn;
     return 301 https://$server_name$request_uri;
 }
