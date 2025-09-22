@@ -24,11 +24,19 @@
     update_cache: yes
 
 - name: Set up repository pinning to prefer our packages over distribution-provided ones
-  command: echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" | sudo tee /etc/apt/preferences.d/99nginx    | sudo tee /etc/apt/preferences.d/99nginx
+  ansible.builtin.copy:
+    dest: /etc/apt/preferences.d/99nginx
+    content: |
+      Package: *
+      Pin: origin nginx.org
+      Pin: release o=nginx
+      Pin-Priority: 900
+    owner: root
+    group: root
+    mode: '0644'
 
 - name: install nginx web server
   apt:
     name: nginx
     state: present
     update_cache: yes
-  
