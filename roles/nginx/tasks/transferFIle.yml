@@ -1,11 +1,12 @@
-- name: Sync nginx config files to server
-  ansible.builtin.synchronize:
+- name: Copy nginx config files to server
+  ansible.builtin.copy:
     src: roles/nginx/files/
     dest: /opt/configs/nginx/
-    recursive: yes
-
-- name: Sync ssh certificates files to server
-  ansible.builtin.synchronize:
-    src: files/sshkey/
+    remote_src: no
+    directory_mode: yes
+- name: Copy ssh certificates files to server
+  ansible.builtin.copy:
+    src: roles/nginx/files/sshkey/
     dest: /opt/configs/nginx/
-    recursive: yes
+    remote_src: no
+    directory_mode: yes
