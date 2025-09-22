@@ -75,4 +75,3 @@
         enabled: yes
   when: agent_mode == 'ssh'  # Only start service in SSH mode; JNLP mode requires manual start
   notify: Reload systemd
-
