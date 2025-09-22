@@ -22,8 +22,18 @@
     group: root
     mode: '0644'
 
-- name: Copy ssh certificates files to server
+- name: Copy SSL private key to server
   ansible.builtin.copy:
-    src: files/sshkey/
-    dest: /opt/configs/nginx/sshkey/
-    directory_mode: yes
+    src: /home/hungnm/certificate/keypem_ssl/key.pem
+    dest: /etc/ssl/private/key.pem
+    owner: root
+    group: root
+    mode: '0600'
+
+- name: Copy SSL certificate to server
+  ansible.builtin.copy:
+    src: /home/hungnm/certificate/keypem_ssl/fullchain.pem
+    dest: /etc/ssl/certs/fullchain.pem
+    owner: root
+    group: root
+    mode: '0644'

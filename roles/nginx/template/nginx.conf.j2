@@ -1,6 +1,6 @@
 # define the user that will own the process
 upstream jenkins {
-    server "{{ ip_address }}":""{{ jenkins_slave_port }}";
+    server "{{ ip_address }}":"{{ jenkins_slave_port }}";
 }
 
 # HTTP to HTTPS redirect for Jenkins
