@@ -1,3 +1,10 @@
+- name: Create folder for nginx config files
+  ansible.builtin.file:
+    path: /opt/configs/nginx
+    state: directory
+    owner: root
+    group: root
+    mode: '0755'
 
 - name: Render nginx.conf from template
   ansible.builtin.template:
