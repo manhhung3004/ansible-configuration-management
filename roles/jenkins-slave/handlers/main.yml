@@ -1,2 +1,4 @@
-# filepath: /home/hungnm/ansible/roles/jenkins/handlers/main.yml
-
+---
+- handler: Reload systemd
+  ansible.builtin.systemd:
+    daemon_reload: yes

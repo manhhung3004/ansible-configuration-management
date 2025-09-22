@@ -43,10 +43,36 @@
 
 - name: Authorize controller public key (SSH mode)
   ansible.builtin.lineinfile:
-    path: "/home/{{ ssh_user }}/.ssh/authorized_keys"
+    path: "/home/{{ agent_user }}/.ssh/authorized_keys"
     create: yes
     line: "{{ controller_pubkey }}"
-    owner: "{{ ssh_user }}"
-    group: "{{ ssh_user }}"
+    owner: "{{ agent_user }}"
+    group: "{{ agent_user }}"
     mode: "0600"
   when: agent_mode == 'ssh'
+
+- name: Download Jenkins agent jar
+  ansible.builtin.get_url:
+    url: "{{ jenkins_url }}/jnlpJars/agent.jar"
+    dest: "{{ agent_home }}/agent.jar"
+    mode: '0755'
+    owner: "{{ agent_user }}"
+    group: "{{ agent_group }}"
+
+- name: Ensure Jenkins agent service file is present
+  ansible.builtin.template:
+    src: jenkins-agent.service.j2
+    dest: /etc/systemd/system/jenkins-agent.service
+    mode: '0644'
+    owner: root
+    group: root
+  notify: Reload systemd
+
+- name: Start and enable Jenkins agent service
+  ansible.builtin.systemd:
+        name: jenkins-agent
+        state: started
+        enabled: yes
+  when: agent_mode == 'ssh'  # Only start service in SSH mode; JNLP mode requires manual start
+  notify: Reload systemd
+

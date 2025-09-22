@@ -1,117 +1,19 @@
-- name: Sync nginx config files to server
-  ansible.builtin.synchronize:
-    src: roles/nginx/files/
-    dest: /opt/configs/nginx/
-    recursive: yes
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: Sync ssh certificates files to server
-  ansible.builtin.synchronize:
-    src: files/sshkey/
-    dest: /opt/configs/nginx/
-    recursive: yes
-    owner: root
-    group: root
-    mode: '0644'
-
-- name: Install prerequisites
-  apt:
-    name:
-      - curl
-      - gnupg2
-      - ca-certificates
-      - lsb-release
-      - ubuntu-keyring
-    state: present
-
-- name: Import an official nginx signing key so apt could verify the packages authenticity.
-  ansible.builtin.apt_key:
-    url: https://nginx.org/keys/nginx_signing.key
-    state: present
-
-- name: Add nginx repository
-  command: curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null
-
-- name: set up the apt repository for stable nginx packages
-  ansible.builtin.apt_repository:
-    repo: "deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/ubuntu `lsb_release -cs` nginx"
-    state: present
-    filename: nginx
-    update_cache: yes
-
-- name: Set up repository pinning to prefer our packages over distribution-provided ones
-  command: echo -e "Package: *\nPin: origin nginx.org\nPin: release o=nginx\nPin-Priority: 900\n" | sudo tee /etc/apt/preferences.d/99nginx    | sudo tee /etc/apt/preferences.d/99nginx
+- name: Transfer config files to server
+  import_tasks: transferFFile.yml
 
 - name: check port 8080
   ansible.builtin.command: sudo netstat -tuln | grep 8080
   register: port_8080_check
   ignore_errors: yes
 
-- name: install nginx web server
-  apt:
-    name: nginx
-    state: present
-    update_cache: yes
+- name: Install nginx web server
+  import_tasks: installNginx.yml
 
-- name: Symlink nginx.conf
-  ansible.builtin.file:
-    src: /opt/configs/nginx/nginx.conf
-    dest: /etc/nginx/nginx.conf
-    state: link
-    owner: root
-    group: root
-
-- name: Symlink page-not-found.html
-  ansible.builtin.file:
-    src: /opt/configs/nginx/page-not-found.html
-    dest: /usr/share/nginx/html/page-not-found.html
-    state: link
-    owner: root
-    group: root
-
-- name: Symlink mime.types
-  ansible.builtin.file:
-    src: /opt/configs/nginx/mime.types
-    dest: /etc/nginx/mime.types
-    state: link
-    owner: root
-    group: root
-
-- name: Symlink SSL cert fullchain.pem for nginx
-  ansible.builtin.file:
-    src: /opt/configs/nginx/fullchain.pem
-    dest: /etc/ssl/certs/fullchain.pem
-    state: link
-    owner: root
-    group: root
-
-- name: Symlink SSL key key.pem for nginx
-  ansible.builtin.file:
-    src: /opt/configs/nginx/key.pem
-    dest: /etc/ssl/private/key.pem
-    state: link
-    owner: root
-    group: root
-    mode: '0600'
+- name: Configure nginx web server
+  import_tasks: configNginx.yml
 
 - name: Start and enable nginx service
-  ansible.builtin.systemd:
-        name: nginx
-        state: started
-        enabled: yes
-
-- name: Reload systemd to recognize the new service
-  ansible.builtin.systemd:
-    daemon_reload: yes
-
-- name: Ensure nginx is listening on port 80
-  ansible.builtin.ufw:
-    rule: allow
-    port: '80'
-    proto: tcp
-    state: enabled
+  import_tasks: enableNginx.yml
 
 - name: Create a simple index.html file
   ansible.builtin.copy:

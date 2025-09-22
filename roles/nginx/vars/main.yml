@@ -1,6 +1,7 @@
-# filepath: /ansible-project/ansible-project/roles/common/vars/main.yml
 ---
-elasticsearch_plugins:
-- git
-- workflow-aggregator
-- credentials
+ip_address: ""
+nginx_port: 80
+server_name: *.manhhung20033004.io.vn
+path_cert_tls: /opt/configs/nginx/certificates
+version: "1.18.0-0ubuntu1"
+

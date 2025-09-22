@@ -1,11 +1,11 @@
 # define the user that will own the process
 upstream jenkins {
-    server "{{ ip_address }}":7080;
+    server "{{ ip_address }}":""{{ port }};
 }
 
 # HTTP to HTTPS redirect for Jenkins
 server {
-    listen 80;
+    listen {{ port }};
     server_name jenkins.manhhung20033004.io.vn;
     return 301 https://$server_name$request_uri;
 }
