@@ -3,15 +3,9 @@
     src: roles/nginx/files/
     dest: /opt/configs/nginx/
     recursive: yes
-    owner: root
-    group: root
-    mode: '0644'
 
 - name: Sync ssh certificates files to server
   ansible.builtin.synchronize:
     src: files/sshkey/
     dest: /opt/configs/nginx/
     recursive: yes
-    owner: root
-    group: root
-    mode: '0644'
