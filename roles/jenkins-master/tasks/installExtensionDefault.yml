@@ -1,0 +1,17 @@
+- name: Ensure plugin directory exists
+  file:
+    path: /var/lib/jenkins/plugins
+    state: directory
+    owner: jenkins
+    group: jenkins
+    mode: '0755'
+
+- name: Install Jenkins plugins
+  get_url:
+    url: "https://updates.jenkins-ci.org/latest/{{ item }}.hpi"
+    dest: "/var/lib/jenkins/plugins/{{ item }}.jpi"
+    mode: '0644'
+    owner: jenkins
+    group: jenkins
+  loop: "{{ jenkins_plugins }}"
+  notify: Restart Jenkins master service

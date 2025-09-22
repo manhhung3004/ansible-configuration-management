@@ -9,3 +9,6 @@
 
 - name: set up jenkins master configuration files
   import_tasks: configJenkins.yml
+
+- name: Install required Jenkins plugins
+  import_tasks: installPluginsJenkins.yml

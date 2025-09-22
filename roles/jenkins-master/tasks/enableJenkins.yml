@@ -8,13 +8,13 @@
   ansible.builtin.systemd:
     daemon_reload: yes
 
-- name: Enable and start Jenkins slave service
+- name: Enable and start Jenkins master service
   ansible.builtin.systemd:
-    name: jenkins-slave
+    name: jenkins-master
     state: started
     enabled: yes
 
-- name: Verify Jenkins slave service status
+- name: Verify Jenkins master service status
   ansible.builtin.systemd:
-    name: jenkins-slave
-    register: jenkins_slave_status
+    name: jenkins-master
+    register: jenkins_master_status

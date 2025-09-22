@@ -7,3 +7,7 @@ jenkins_master_home: /var/lib/jenkins
 jenkins_master_executors: 2
 jenkins_master_mode: NORMAL
 jenkins_master_labels: ansible-master
+jenkins_plugins:
+  - git
+  - workflow-aggregator
+  - blueocean
