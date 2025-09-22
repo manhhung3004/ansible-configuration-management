@@ -11,4 +11,4 @@
   import_tasks: configJenkins.yml
 
 - name: Install required Jenkins plugins
-  import_tasks: installPluginsJenkins.yml
+  import_tasks: installExtensionDefault.yml
