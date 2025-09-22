@@ -1,17 +1,15 @@
 # filepath: /home/hungnm/ansible/roles/jenkins/handlers/main.yml
-
-handlers:
-  - name: restart nginx
-    ansible.builtin.systemd:
-      name: nginx
-      state: restarted
-      enabled: yes
-  - name: reload nginx
-    ansible.builtin.systemd:
-      name: nginx
-      state: reloaded
-      enabled: yes
-  - name: Check ufw status
-    ansible.builtin.command: ufw status
-    register: ufw_status
-    changed_when: false
+- name: restart nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+    enabled: yes
+- name: reload nginx
+  ansible.builtin.systemd:
+    name: nginx
+    state: reloaded
+    enabled: yes
+- name: Check ufw status
+  ansible.builtin.command: ufw status
+  register: ufw_status
+  changed_when: false
