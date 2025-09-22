@@ -2,8 +2,8 @@
   ansible.builtin.systemd:
     daemon_reload: yes
   
-- name: Restart Jenkins master service
+- name: Restart Jenkins service
   ansible.builtin.systemd:
-    name: jenkins-master
+    name: jenkins
     state: restarted
     enabled: yes

@@ -1,6 +1,6 @@
 ---
 ip_address: "192.168.1.200"
 nginx_port: 80
-server_name_jenkins: "nginx.manhhung20033004.io.vn"
-jenkins_slave_port: 7080
+server_name_jenkins: "jenkins.manhhung20033004.io.vn"
+jenkins_master_port: 7080
 version: "1.0"
