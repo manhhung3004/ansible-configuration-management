@@ -1,0 +1,8 @@
+- name: Setup kind cluster
+  hosts: server_master
+  vars_files:
+    - ../group_vars/server_master.yml
+  become: true
+  gather_facts: true
+  roles:
+    - kind
