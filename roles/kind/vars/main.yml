@@ -1,3 +1,7 @@
 #SPDX-License-Identifier: MIT-0
 ---
 # vars file for kind
+kind_version: v0.11.0
+cluster_name: kind-cluster
+node_image: kindest/node:v1.27.3
+network_plugin: calico

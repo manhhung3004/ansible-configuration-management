@@ -3,11 +3,11 @@
 # tasks file for kind
 
 - name: Check and install kind
-  import_tasks: install_Kind.yml
+  import_tasks: install_kind.yml
   tags: install
 
 - name: Transfer kind config file to server
-  import_tasks: transfer_File.yml
+  import_tasks: transfer_file.yml
   tags: config
 
 - name: Create kind cluster
@@ -20,7 +20,7 @@
   tags: create
 
 - name: Verify kind cluster
-  import_tasks: verify_Kind.yml
+  import_tasks: verify_kind.yml
   tags: verify
 
 
