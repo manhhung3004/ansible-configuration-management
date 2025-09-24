@@ -1,7 +1,7 @@
 - name: Transfer kind config file to server
   ansible.builtin.copy:
     src: ../files/Ha-cluster.yaml
-    dest: /opt/kind-config.yaml
+    dest: /opt/Ha-cluster.yaml
     owner: root
     group: root
     mode: '0644'
