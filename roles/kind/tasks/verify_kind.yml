@@ -1,0 +1,8 @@
+- name: Verify kind cluster
+  ansible.builtin.command: kubectl get nodes
+  environment:
+    KUBECONFIG: /home/{{ ansible_user }}/.kube/config
+  register: kubectl_check
+  failed_when: "'Ready' not in kubectl_check.stdout"
+  changed_when: false
+  tags: verify

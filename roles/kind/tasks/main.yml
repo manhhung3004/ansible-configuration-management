@@ -1,0 +1,26 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for kind
+
+- name: Check and install kind
+  import_tasks: install_Kind.yml
+  tags: install
+
+- name: Transfer kind config file to server
+  import_tasks: transfer_File.yml
+  tags: config
+
+- name: Create kind cluster
+  import_tasks: create_kind.yml
+  tags: create
+
+- name: Wait for cluster to be ready
+  ansible.builtin.pause:
+    seconds: 15
+  tags: create
+
+- name: Verify kind cluster
+  import_tasks: verify_Kind.yml
+  tags: verify
+
+

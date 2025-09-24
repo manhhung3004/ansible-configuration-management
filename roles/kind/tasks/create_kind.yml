@@ -1,0 +1,7 @@
+- name: Run init-setup.sh
+  ansible.builtin.command: /opt/init-setup.sh
+  args:
+    creates: /etc/containerd/config.toml
+  become: yes
+  become_user: root
+  tags: create
