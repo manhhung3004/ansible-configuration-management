@@ -1,7 +1,12 @@
+- name: mkdir /opt/kind
+  ansible.builtin.file: 
+    path: /opt/kind
+    state: directory
+
 - name: Transfer kind config file to server
   ansible.builtin.copy:
     src: ../files/Ha-cluster.yaml
-    dest: /opt/Ha-cluster.yaml
+    dest: /opt/kind/Ha-cluster.yaml
     owner: root
     group: root
     mode: '0644'
@@ -10,7 +15,7 @@
 - name: Tranfer init-setup.sh
   ansible.builtin.copy:
     src: ../files/init-setup.sh
-    dest: /opt/init-setup.sh
+    dest: /opt/kind/init-setup.sh
     owner: root
     group: root
     mode: '0755'
@@ -19,7 +24,7 @@
 - name: Tranfer delete-cluster-old.sh
   ansible.builtin.copy:
     src: ../files/delete-cluster-old.sh
-    dest: /opt/delete-cluster-old.sh
+    dest: /opt/kind/delete-cluster-old.sh
     owner: root
     group: root
     mode: '0755'
