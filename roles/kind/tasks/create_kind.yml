@@ -3,3 +3,5 @@
   ansible.builtin.shell: /opt/kind/init-setup.sh
   register: kind_create
   ignore_errors: yes
+  args:
+    chdir: /opt/kind
