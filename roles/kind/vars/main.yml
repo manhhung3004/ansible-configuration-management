@@ -5,3 +5,4 @@ kind_version: v0.11.0
 cluster_name: kind-cluster
 node_image: kindest/node:v1.27.3
 network_plugin: calico
+ansible_user: ubuntu
