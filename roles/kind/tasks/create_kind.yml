@@ -1,6 +1,5 @@
 - name: run init cluster
   become: yes
   ansible.builtin.shell: /opt/init_setup.sh
-  warn: false
   register: kind_create
   ignore_errors: yes
