@@ -12,3 +12,7 @@
     src: exports.j2
     dest: /etc/exports
   tags: config
+
+- name: Apply NFS export configuration
+  ansible.builtin.command: exportfs -a
+  notify: Restart NFS Service
