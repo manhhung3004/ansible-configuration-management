@@ -3,14 +3,9 @@
     update_cache: yes
     cache_valid_time: 3600
 
-- name: Check if nfs-kernel-server is installed
-  ansible.builtin.command: dpkg -l | grep nfs-kernel-server
-  register: nfs_check
-  ignore_errors: yes
-
-- name: Install nfs-kernel-server if not installed
+- name: Ensure nfs-kernel-server is installed
   ansible.builtin.apt:
     name: nfs-kernel-server
     state: present
     update_cache: yes
-  when: nfs_check.rc != 0
+    cache_valid_time: 3600

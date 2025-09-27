@@ -5,8 +5,6 @@
     owner: nobody
     group: nogroup
     mode: '0755'
-  args:
-    creates: /mnt/nfs
   tags: config
 
 - name: Configure /etc/exports
