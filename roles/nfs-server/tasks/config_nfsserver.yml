@@ -1,0 +1,16 @@
+- name: Create export directory
+  ansible.builtin.file:
+    path: /mnt/nfs
+    state: directory
+    owner: nobody
+    group: nogroup
+    mode: '0755'
+  args:
+    creates: /mnt/nfs
+  tags: config
+
+- name: Configure /etc/exports
+  ansible.builtin.template:
+    src: exports.j2
+    dest: /etc/exports
+  tags: config

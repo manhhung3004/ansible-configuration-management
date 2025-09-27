@@ -1,0 +1,25 @@
+#SPDX-License-Identifier: MIT-0
+---
+# handlers file for nfs-server
+- name: config exportfs -a
+  ansible.builtin.command: exportfs -a
+
+- name: Restart NFS service
+  ansible.builtin.service:
+    name: nfs-kernel-server
+    state: restarted
+  listen: Restart NFS Service
+
+- name: Reload NFS service
+  ansible.builtin.service:
+    name: nfs-kernel-server
+    state: reloaded
+  listen: Reload NFS Service
+
+- name: Start NFS service
+  ansible.builtin.service:
+    name: nfs-kernel-server
+    state: started
+    enabled: yes
+  listen: Start NFS Service
+  

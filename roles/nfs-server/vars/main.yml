@@ -1,0 +1,6 @@
+#SPDX-License-Identifier: MIT-0
+---
+# vars file for nfs-server
+path_export: /mnt/nfs
+clients_1: 192.168.1.200/24
+clients_2: 192.168.1.201/24

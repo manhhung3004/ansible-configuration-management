@@ -1,7 +1,9 @@
 - name: Verify kind cluster
   ansible.builtin.command: kubectl get nodes
+  become: yes
+  become_user: root
   environment:
-    KUBECONFIG: /home/{{ ansible_user }}/.kube/config
+    KUBECONFIG: /root/.kube/config
   register: kubectl_check
   failed_when: "'Ready' not in kubectl_check.stdout"
   changed_when: false

@@ -1,0 +1,8 @@
+- name: Setup NFS Server
+  hosts: server_agent
+  vars_files:
+    - ../group_vars/server_agent.yml
+  become: true
+  gather_facts: true
+  roles:
+    - nfs-server

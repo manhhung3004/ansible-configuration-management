@@ -1,0 +1,10 @@
+#SPDX-License-Identifier: MIT-0
+---
+# tasks file for nfs-server
+- name: Include install nfsserver
+  import_tasks: install_nfsserver.yml
+  notify: Start NFS Service
+
+- name: Configure NFS server
+  import_tasks: config_nfsserver.yml
+  notify: Restart NFS service
